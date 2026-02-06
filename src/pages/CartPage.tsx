@@ -44,7 +44,8 @@ export default function CartPage() {
 
     setIsProcessing(true);
     
-    // Use hardcoded branchId as specified in requirements
+    // TODO: Make branchId configurable via environment variable or app context
+    // Currently hardcoded to 1 as per requirements
     const payload: CreateOrderPayload = {
       branchId: 1,
       items: items.map((item) => ({

@@ -5,6 +5,7 @@ import { api } from '../../../api/config';
 import { useTheme } from '../../../context/ThemeContext';
 import { useCart } from '../../../context/CartContext';
 import { useToast } from '../../../context/ToastContext';
+import { calculatePrice } from '../../../utils/priceUtils';
 
 interface Product {
   productId: number;
@@ -61,7 +62,7 @@ export default function Products() {
         addToCart({
           productId: product.productId,
           name: product.name,
-          price: product.discount ? product.price * (1 - product.discount) : product.price,
+          price: calculatePrice(product),
           imgName: product.imgName,
         }, quantity);
         showToast(`Added ${quantity} ${product.name} to cart`, 'success');
