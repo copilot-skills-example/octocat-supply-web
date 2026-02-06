@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { api } from '../../../api/config';
 import { useTheme } from '../../../context/ThemeContext';
+import { useCart } from '../../../context/CartContext';
+import { useToast } from '../../../context/ToastContext';
 
 interface Product {
   productId: number;
@@ -23,6 +25,8 @@ const fetchProducts = async (): Promise<Product[]> => {
 
 export default function Products() {
   const [quantities, setQuantities] = useState<Record<number, number>>({});
+  const { addToCart, items: cartItems } = useCart();
+  const { showToast } = useToast();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showModal, setShowModal] = useState(false);
@@ -52,12 +56,20 @@ export default function Products() {
   const handleAddToCart = (productId: number) => {
     const quantity = quantities[productId] || 0;
     if (quantity > 0) {
-      // TODO: Implement cart functionality
-      alert(`Added ${quantity} items to cart`);
-      setQuantities((prev) => ({
-        ...prev,
-        [productId]: 0,
-      }));
+      const product = products?.find((p) => p.productId === productId);
+      if (product) {
+        addToCart({
+          productId: product.productId,
+          name: product.name,
+          price: product.discount ? product.price * (1 - product.discount) : product.price,
+          imgName: product.imgName,
+        }, quantity);
+        showToast(`Added ${quantity} ${product.name} to cart`, 'success');
+        setQuantities((prev) => ({
+          ...prev,
+          [productId]: 0,
+        }));
+      }
     }
   };
 
@@ -157,6 +169,8 @@ export default function Products() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {filteredProducts?.map((product) => {
               const hasDiscount = product.discount != null && product.discount > 0;
+              const cartItem = cartItems.find((item) => item.productId === product.productId);
+              const inCartQuantity = cartItem?.quantity || 0;
               return (
                 <div
                   key={product.productId}
@@ -190,6 +204,22 @@ export default function Products() {
                     {product.description}
                   </p>
                   <div className="space-y-4 mt-auto">
+                    {inCartQuantity > 0 && (
+                      <div className="flex items-center text-sm text-primary">
+                        <svg
+                          className="w-4 h-4 mr-1"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {inCartQuantity} in cart
+                      </div>
+                    )}
                     <div className="flex justify-between items-center">
                       {hasDiscount ? (
                         <div>
