@@ -33,7 +33,7 @@ In the PR body, include:
 <Description of changes — React components, routes, Tailwind styling, etc.>
 
 ## Cross-Repo Dependencies
-- Depends on: <list any PRs in octocat-supply-common or octocat-supply-api this depends on>
+- Depends on: <list any PRs in octocat-supply-api this depends on>
 - Required by: <list any PRs that depend on this>
 ```
 

@@ -52,22 +52,13 @@ window.__RUNTIME_CONFIG__ = {
 };
 ```
 
-## Shared Types
-
-This repo depends on `@octocat-supply/common` for shared TypeScript interfaces:
-
-```bash
-npm install @octocat-supply/common
-```
-
 ## Part Of
 
 | Repo | Purpose |
 |------|---------|
-| [octocat-supply-platform](https://github.com/octocat-supply/octocat-supply-platform) | Master orchestrator |
+| [octocat-supply-platform](https://github.com/copilot-skills-example/octocat-supply-platform) | Master orchestrator |
 | **octocat-supply-web** (this) | Frontend |
-| [octocat-supply-api](https://github.com/octocat-supply/octocat-supply-api) | REST API |
-| [octocat-supply-common](https://github.com/octocat-supply/octocat-supply-common) | Shared types |
+| [octocat-supply-api](https://github.com/copilot-skills-example/octocat-supply-api) | REST API |
 
 ## License
 
