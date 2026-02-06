@@ -3,12 +3,14 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useCart } from '../context/CartContext';
 import { useState } from 'react';
+import SearchAutoComplete from './SearchAutoComplete';
 
 export default function Navigation() {
   const { isLoggedIn, isAdmin, logout } = useAuth();
   const { darkMode, toggleTheme } = useTheme();
   const { totalItems } = useCart();
   const [adminMenuOpen, setAdminMenuOpen] = useState(false);
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   return (
     <nav
@@ -27,6 +29,12 @@ export default function Navigation() {
               </div>
             </Link>
           </div>
+
+          {/* Desktop Search - full width */}
+          <div className="hidden lg:flex flex-1 max-w-md mx-8">
+            <SearchAutoComplete containerStyle="w-full" />
+          </div>
+
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
               <Link
@@ -87,6 +95,25 @@ export default function Navigation() {
             </div>
           </div>
           <div className="flex items-center space-x-4">
+            {/* Mobile Search Toggle */}
+            <button
+              onClick={() => setShowMobileSearch(!showMobileSearch)}
+              className={`lg:hidden p-2 rounded-full ${darkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'} transition-colors`}
+              aria-label="Toggle search"
+            >
+              <svg
+                className={`h-6 w-6 ${darkMode ? 'text-light' : 'text-gray-700'}`}
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
             {/* Cart Icon with Badge */}
             <Link
               to="/cart"
@@ -165,6 +192,13 @@ export default function Navigation() {
             )}
           </div>
         </div>
+
+        {/* Mobile Search Bar - collapsible */}
+        {showMobileSearch && (
+          <div className="lg:hidden pb-4 px-2">
+            <SearchAutoComplete containerStyle="w-full" />
+          </div>
+        )}
       </div>
     </nav>
   );
